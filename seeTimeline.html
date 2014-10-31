@@ -1,0 +1,82 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foundation</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script src="bower_components/modernizr/modernizr.js"></script>
+  </head>
+  <style type="text/css">
+        #jstwitter {
+    position: relative;
+    }
+    #jstwitter .item {
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+    -webkit-box-shadow:0 0 3px 1px rgba(100,100,100,0.2);
+    -moz-box-shadow:0 0 3px 1px rgba(100,100,100,0.2);
+    box-shadow:0 0 3px 1px rgba(100,100,100,0.2);
+    overflow:hidden;
+    background: #fff;
+    }
+    #jstwitter .tweet-wrapper {
+    padding:10px;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    line-height:16px;
+    }
+    #jstwitter .item a {
+    text-decoration: none;
+    color: #03a8e5;
+    }
+    #jstwitter .item img {
+    width:100%;
+    }
+    #jstwitter .item a:hover {
+    text-decoration: underline;
+    }
+    #jstwitter .item .text {
+    display:block;
+    }
+    #jstwitter .item .time, #jstwitter .tweet .user {
+    font-style: italic;
+    color: #666666;
+    }
+  </style>
+  <body>
+    <div class="row">
+      <div class="large-12 columns">
+        <h1>Welcome to Test Twitter API</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="panel">
+          <h3>CodeBird</h3>
+          <p>See what @NavalAcademy is saying in Twitter.</p>                    
+        </div>
+        
+      <div id="jstwitter"></div>
+      <div class="item">{IMG}
+        <div class="tweet-wrapper"> <span class="text">{TEXT}</span>
+          <span class="time">
+            <a href="{URL}" target="_blank">{AGO}</a>
+          </span>
+          by <span class="user">{USER}</span>    
+        </div>
+      </div>
+      
+      </div>
+    </div>
+    </div>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/foundation/js/foundation.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/tweetStatus.js"></script>
+  </body>
+</html>
