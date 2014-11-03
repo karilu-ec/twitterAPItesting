@@ -3,11 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Foundation</title>
+    <title>See USNA Timeline</title>
     <link rel="stylesheet" href="css/app.css" />
     <script src="bower_components/modernizr/modernizr.js"></script>
-  </head>
-  <style type="text/css">
+     <style type="text/css">
         #jstwitter {
     position: relative;
     }
@@ -46,6 +45,8 @@
     color: #666666;
     }
   </style>
+  </head>
+ 
   <body>
     <div class="row">
       <div class="large-12 columns">
@@ -60,15 +61,17 @@
           <p>See what @NavalAcademy is saying in Twitter.</p>                    
         </div>
         
-      <div id="jstwitter"></div>
-      <div class="item">{IMG}
-        <div class="tweet-wrapper"> <span class="text">{TEXT}</span>
-          <span class="time">
-            <a href="{URL}" target="_blank">{AGO}</a>
-          </span>
-          by <span class="user">{USER}</span>    
+      <div id="jstwitter">
+        <div class="item">{IMG}
+        <div class="tweet-wrapper">
+          <span class="text">{TEXT}</span>
+          <span class="time"><a href="{URL}" target="_blank">{AGO}</a>
+          </span> by <span class="user">{USER}</span>
         </div>
+        </div>
+        
       </div>
+     
       
       </div>
     </div>
@@ -78,5 +81,11 @@
     <script src="bower_components/foundation/js/foundation.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/tweetStatus.js"></script>
+    <script type="text/javascript">
+          $(function () {
+    // start jqtweet!
+    JQTWEET.loadTweets();
+    });
+    </script>
   </body>
 </html>

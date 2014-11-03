@@ -1,4 +1,5 @@
 *.DS_Store
 /css/*
 /bower_components/*
+tokensfile.txt
 /node_modules/*

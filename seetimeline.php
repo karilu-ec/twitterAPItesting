@@ -1,14 +1,14 @@
 <?php
 //We use already made Twitter OAuth library  https://github.com/jublonet/codebird-php
-require_once ('./bower_components/codebird-php/src/codebird.php');
+require_once ('bower_components/codebird-php/src/codebird.php');
 //Twitter OAuth Settings
 $CONSUMER_KEY = '...';
 $CONSUMER_SECRET = '...';
-$ACCESS_TOKEN = '.....';
+$ACCESS_TOKEN = '...';
 $ACCESS_TOKEN_SECRET = '...';
 //Get authenticated
-Codebird::setConsumerKey($CONSUMER_KEY, $CONSUMER_SECRET);
-$cb = Codebird::getInstance();
+\Codebird\Codebird::setConsumerKey($CONSUMER_KEY, $CONSUMER_SECRET);
+$cb = \Codebird\Codebird::getInstance();
 $cb->setToken($ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
 //retrieve posts
 $q = $_POST['q'];
