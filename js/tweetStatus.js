@@ -7,9 +7,8 @@
             ///search: '%23heroes2013', //leave this blank if you want to show user's tweet
             search: '',
             user: 'navalacademy', //username
-            numTweets: 21, //number of tweets
-            appendTo: '#jstwitter',
-            template: '<div class="item">{IMG}<div class="tweet-wrapper"><span class="text">{TEXT}</span><span class="time"><a href="{URL}" target="_blank">{AGO}</a></span> by <span class="user">{USER}</span></div></div>',
+            numTweets: 5, //number of tweets
+            appendTo: '#usna-social-media-box',            
             // core function of jqtweet
             // https://dev.twitter.com/docs/using-search
             loadTweets: function() {
@@ -33,7 +32,7 @@
                     type: 'POST',
                     dataType: 'json',
                     data: request,
-                    done: function(data, textStatus, xhr) {
+                    success: function(data, textStatus, xhr) {
                         if(data.httpstatus == 200) {
                             if(JQTWEET.search) data = data.statuses;
                             var text, name, img;
@@ -48,15 +47,15 @@
                                         }
                                     } catch(e) {
                                         //no media
-                                    }                                    
-                                    $("#jstwitter").append($(".user").replaceWith("<span class='user'>" + data[i].user.screen_name + "</span>"));
-                                        
-                                    /*JQTWEET.template.replace('{TEXT}', JQTWEET.ify.clean(data[i].text) )
-                                        .replace('{USER}', data[i].user.screen_name)
-                                        .replace('{IMG}', img)
-                                        .replace('{AGO}', JQTWEET.timeAgo(data[i].created_at) )
-                                        .replace('{URL}', url )           
-                                        );*/ 
+                                    }
+
+                                    var $divFeedContainer = $("<div class='feed-container'/>");
+                                    var $divTitle = $("<div class='title'><h4> " + data[i].user.screen_name + "</h4>\
+                                                      <span class='timestamp'>" +  JQTWEET.timeAgo(data[i].created_at) + "</span></div>");
+                                    var $text = $("<p>" + JQTWEET.ify.clean(data[i].text) + "</p>");
+                                    $divFeedContainer.append($divTitle, $text);
+                                    
+                                    $(JQTWEET.appendTo).append($divFeedContainer);                                
                                 }
                             } catch(e) {
                                 //item is less than item count
@@ -74,10 +73,6 @@
             timeAgo: function(dateString) {
                 var rightNow = new Date();
                 var then = new Date(dateString);
-                if($.browser.msie) {
-                    // IE can't parse these crazy Ruby dates
-                    then = Date.parse(dateString.replace(/( \+)/, ' UTC$1'));
-                }
                 var diff = rightNow - then;
                 var second = 1000,
                     minute = second * 60,
