@@ -29,11 +29,11 @@
                 }
                 $.ajax({
                     url: 'seetimeline.php',
-                    type: 'POST',
+                    type: 'GET',
                     dataType: 'json',
-                    data: request,
+                    //data: request,
                     success: function(data, textStatus, xhr) {
-                        if(data.httpstatus == 200) {
+                        if(data.httpstatus == 200 && data.rate.remaining > 1) {
                             if(JQTWEET.search) data = data.statuses;
                             var text, name, img;
                             try {
@@ -43,16 +43,15 @@
                                     url = 'http://twitter.com/' + data[i].user.screen_name + '/status/' + data[i].id_str;
                                     try {
                                         if(data[i].entities['media']) {
-                                            img = '<a href="' + url + '" target="_blank"><img src="' + data[i].entities['media'][0].media_url + '" /></a>';
+                                            img = '<a href="' + url + '" target="_blank"><img src="' + data[i].entities['media'][0].media_url + ':small" alt="USNA Tweet imate" width="340"  /></a>';
                                         }
                                     } catch(e) {
                                         //no media
                                     }
-
                                     var $divFeedContainer = $("<div class='feed-container'/>");
                                     var $divTitle = $("<div class='title'><h4> " + data[i].user.screen_name + "</h4>\
                                                       <span class='timestamp'>" +  JQTWEET.timeAgo(data[i].created_at) + "</span></div>");
-                                    var $text = $("<p>" + JQTWEET.ify.clean(data[i].text) + "</p>");
+                                    var $text = $("<p>" + JQTWEET.ify.clean(data[i].text) + img + "</p>");
                                     $divFeedContainer.append($divTitle, $text);
                                     
                                     $(JQTWEET.appendTo).append($divFeedContainer);                                
@@ -60,8 +59,7 @@
                             } catch(e) {
                                 //item is less than item count
                             }
-
-                        } else alert('no data returned');
+                        }
                     }
                 });
             },
