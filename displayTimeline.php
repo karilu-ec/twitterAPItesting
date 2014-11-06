@@ -4,7 +4,7 @@ require_once ('bower_components/codebird-php/src/codebird.php');
 $cache = "tweet-cache-html.txt";
 // Read cache file. Cache File will update once every 15 min.
 if (file_exists($cache)) {
-    //print json data from file.
+    //print html data from file.
     $cachefile = fopen($cache, 'r');
     $data = fgets($cachefile);
     fclose($cachefile);
