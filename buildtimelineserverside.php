@@ -48,6 +48,7 @@ if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
             }                                    
             $ago = timeAgo($obj->created_at);
             $divTitle = "<div class='title'><h4> " . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>";
+            //$text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>";
             $text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>";
             $markup .= '<div class="feed-container">'.$divTitle.$text.'</div>';            
         }
@@ -74,10 +75,7 @@ function pluralize( $count, $text )
 
 function makeTwitterLinks($tweet) {
     //links
-    $tweet = preg_replace("/(^|[\n ])([\w]*?)((ht|f)tp(s)?:\/\/[\w]+[^ \,\"\n\r\t&lt;]*)/is", "$1$2<a href=\"$3\" >$3</a>", $tweet);
-    $tweet = preg_replace("/(^|[\n ])([\w]*?)((www|ftp)\.[^ \,\"\t\n\r&lt;]*)/is", "$1$2<a href=\"http://$3\" >$3</a>", $tweet);
-    $tweet = preg_replace("/(^|[\n ])([a-z0-9&\-_\.]+?)@([\w\-]+\.([\w\-\.]+)+)/i", "$1<a href=\"mailto:$2@$3\">$2@$3</a>", $tweet);
-
+    $tweet = preg_replace("/([\w]+\:\/\/[\w-?&;#~=\.\/\@]+[\w\/])/", "<a target=\"_blank\" href=\"$1\">$1</a>", $tweet);
     //hash tags
     $tweet = preg_replace("/(^|\s+)#(\w+)/i", "$1<a target=\"_blank\" href=\"http://twitter.com/search?q=%23$2\">#$2</a>", $tweet);
     //at
