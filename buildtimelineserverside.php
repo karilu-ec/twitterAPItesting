@@ -44,10 +44,13 @@ if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
             if(isset($obj->entities->media) ) {
               $firstImage =  $obj->entities->media;
               $imageURL = $firstImage[0]->media_url;
-              $img = '<a href="'.$url.'" target="_blank"><img src="'.$imageURL.':small" alt="USNA Tweet image" width="340"  /></a>';
+              $height = $firstImage[0]->sizes->small->h;
+              if ($height < 260) { //don't include images that are way too long.
+                $img = '<a href="'.$url.'" target="_blank"><img src="'.$imageURL.':small" alt="USNA Tweet image '.$height.'" width="340"  /></a>';
+              }
             }                                    
             $ago = timeAgo($obj->created_at);
-            $divTitle = "<div class='title'><h4> " . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>";
+            $divTitle = "<div class='title'><h4> @" . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>";
             //$text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>";
             $text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>";
             $markup .= '<div class="feed-container">'.$divTitle.$text.'</div>';            
@@ -61,9 +64,9 @@ function timeAgo($dateString) {
     $then = new DateTime($dateString);
     $diff = $rightNow->diff($then);
     $suffix = ($diff->invert) ? ' ago' : '' ;
-    if ( $diff->y >= 1 ) return pluralize($diff->y, 'year' ) . $suffix;
-    if ( $diff->m >= 1 ) return pluralize($diff->m, 'month' ) . $suffix;
-    if ( $diff->d >= 1 ) return pluralize($diff->d, 'day' ) . $suffix;
+    if ( $diff->y >= 1 ) return $then->format('F d y');
+    if ( $diff->m >= 1 ) return $then->format('F d');
+    if ( $diff->d >= 1 && $diff->d < 2  ) return pluralize($diff->d, 'day' ) . $suffix; else return $then->format('F d');;
     if ( $diff->h >= 1 ) return pluralize($diff->h, 'hour' ) . $suffix;
     if ( $diff->i >= 1 ) return pluralize($diff->i, 'minute' ) . $suffix;
     return pluralize($diff->s, 'second' ) . $suffix;
