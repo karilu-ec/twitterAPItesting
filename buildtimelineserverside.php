@@ -4,8 +4,17 @@
 
 //We use already made Twitter OAuth library  https://github.com/jublonet/codebird-php
 require_once ('bower_components/codebird-php/src/codebird.php');
-$cache = "tweet-cache-html.txt";
+$cache = "tweet-FB-cache-html.txt";
+$FBcache = "FBPosts.txt"; //produced by the Python script that reads the Facebook's Naval Academy page.
 $currentTime = time();
+$allPosts = "";
+$FBPosts = "";
+if (file_exists($FBcache)) {
+    if(file_get_contents($FBcache) !== false) {
+        $FBPosts = file_get_contents($FBcache);
+    }
+    $allPosts = $FBPosts;
+}
 
 //if cache has not expired. Read cache file. Set to check Twitter once every 5 min.
 if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
@@ -33,10 +42,10 @@ if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
     //Results come in JSON
     $status=$data['httpstatus'];
     $remaining=$data['rate']['remaining'];
+    $twitterPosts="";
     if ($status == 200 && $remaining > 1) {
         //Need to build the markup right here and have Jquery just display what I built.
         
-        $markup="";
         for($i = 0; $i < $numTweets; $i++) {
             $img = '';
             $obj = $data[$i];
@@ -50,13 +59,16 @@ if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
               }
             }                                    
             $ago = timeAgo($obj->created_at);
-            $divTitle = "<div class='title'><h4> @" . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>";
+            $divTitle = "<div class='title'><h4><img src='http://www.usna.edu/CMS/_standard3.0/_files/img/twitter-color.png' alt='twitter logo' /> @" . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>";
             //$text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>";
             $text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>";
-            $markup .= '<div class="feed-container">'.$divTitle.$text.'</div>';            
+            $twitterPosts .= '<div class="feed-container">'.$divTitle.$text.'</div>';            
         }
-        file_put_contents($cache, $markup);
+        $allPosts .= $twitterPosts;
     }
+    if ($allPosts != "") {
+        file_put_contents($cache, $allPosts);
+    }   
 }
 
 function timeAgo($dateString) {
@@ -66,7 +78,7 @@ function timeAgo($dateString) {
     $suffix = ($diff->invert) ? ' ago' : '' ;
     if ( $diff->y >= 1 ) return $then->format('F d y');
     if ( $diff->m >= 1 ) return $then->format('F d');
-    if ( $diff->d >= 1 && $diff->d < 2  ) return pluralize($diff->d, 'day' ) . $suffix; else return $then->format('F d');;
+    if ( $diff->d >= 1 && $diff->d < 2  ) return pluralize($diff->d, 'day' ) . $suffix; else return $then->format('F d');
     if ( $diff->h >= 1 ) return pluralize($diff->h, 'hour' ) . $suffix;
     if ( $diff->i >= 1 ) return pluralize($diff->i, 'minute' ) . $suffix;
     return pluralize($diff->s, 'second' ) . $suffix;
