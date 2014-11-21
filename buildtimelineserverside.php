@@ -59,10 +59,9 @@ if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
               }
             }                                    
             $ago = timeAgo($obj->created_at);
-            $divTitle = "<div class='title'><h4><img src='http://www.usna.edu/CMS/_standard3.0/_files/img/twitter-color.png' alt='twitter logo' /> @" . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>";
-            //$text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>";
-            $text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>";
-            $twitterPosts .= '<div class="feed-container">'.$divTitle.$text.'</div>';            
+            $divTitle = "<div class='title'><h4><img src='http://www.usna.edu/CMS/_standard3.0/_files/img/twitter-color.png' alt='twitter logo' />@" . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>\n";
+            $text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>\n";
+            $twitterPosts .= "<div class=\"feed-container\">".$divTitle.$text."</div>\n";
         }
         $allPosts .= $twitterPosts;
     }

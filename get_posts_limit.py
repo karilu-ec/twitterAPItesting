@@ -95,7 +95,7 @@ def format_post_for_slick_slider(post):
     if message == '' and post.get('picture') is None:
         return False
     else:
-        divTitle = "<div class=\"title\"><h4><img src=\"http://www.usna.edu/CMS/_standard3.0/_files/img/facebook-color.png\" alt=\"FB logo\" />qUSNavalAcademy</h4><span class=\"timestamp\">%s</span></div>\n" %ago
+        divTitle = "<div class=\"title\"><h4><img src=\"http://www.usna.edu/CMS/_standard3.0/_files/img/facebook-color.png\" alt=\"FB logo\" />USNavalAcademy</h4><span class=\"timestamp\">%s</span></div>\n" %ago
         if post.get('picture') is not None:
             ## FB picture if type is photo. Get a larger image other than the thumbnail.
             if post.get('type') == "photo":
