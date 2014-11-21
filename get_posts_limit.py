@@ -20,10 +20,12 @@ def get_photo(objectID):
         ##pictures = graph.api_request()
         numImages = pictures.get('images')
         for img in numImages:
-            if img.get('width') > 130 and img.get('width') < 200:
+            if img.get('height') > 130 and img.get('height') < 260:
                 url = img.get('source')            
                 return url
                 break
+        else:
+            return False
     except facebook.GraphAPIError as e:
         #print "Error:", e
         return False
