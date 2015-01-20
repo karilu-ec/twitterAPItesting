@@ -3,9 +3,10 @@
 //To run in a cron. Once every 5 minutes.
 
 //We use already made Twitter OAuth library  https://github.com/jublonet/codebird-php
-require_once ('bower_components/codebird-php/src/codebird.php');
+//require_once ('bower_components/codebird-php/src/codebird.php'); //Test
+require_once ('/www/htdocs/CMS/_standard3.0/_files/bower_components/codebird-php/src/codebird.php'); // production
 $cache = "tweet-FB-cache-html.txt";
-$FBcache = "FBPosts.txt"; //produced by the Python script that reads the Facebook's Naval Academy page.
+$FBcache = "FBPostsUSNavalAcademy.txt"; //produced by the Python script that reads the Facebook's Naval Academy page.
 $currentTime = time();
 $allPosts = "";
 $FBPosts = "";
@@ -55,7 +56,7 @@ if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
               $imageURL = $firstImage[0]->media_url;
               $height = $firstImage[0]->sizes->small->h;
               if ($height < 260) { //don't include images that are way too long.
-                $img = '<a href="'.$url.'" target="_blank"><img src="'.$imageURL.':small" alt="USNA Tweet image '.$height.'" width="340"  /></a>';
+                $img = '<a href="'.$url.'" target="_blank"><img src="'.$imageURL.':small" alt="USNA Tweet image '.$height.'" /></a>';
               }
             }                                    
             $ago = timeAgo($obj->created_at);
@@ -93,7 +94,7 @@ function makeTwitterLinks($tweet) {
     //hash tags
     $tweet = preg_replace("/(^|\s+)#(\w+)/i", "$1<a target=\"_blank\" href=\"http://twitter.com/search?q=%23$2\">#$2</a>", $tweet);
     //at
-    $tweet = preg_replace("/\B[@＠]([a-zA-Z0-9_]{1,20})/", "<a target=\"_blank\" href=\"http://twitter.com/intent/user?screen_name='$1'\">@$1</a>", $tweet);
+    $tweet = preg_replace("/\B[@＠]([a-zA-Z0-9_]{1,20})/", "<a target=\"_blank\" href=\"http://twitter.com/intent/user?screen_name=$1\">@$1</a>", $tweet);
     //user list
     $tweet = preg_replace("/\B[@＠]([a-zA-Z0-9_]{1,20}\/\w+)/", "<a target=\"_blank\" href=\"http://twitter.com/$1\">@$1</a>", $tweet);    
   
