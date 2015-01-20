@@ -5,20 +5,23 @@
 //We use already made Twitter OAuth library  https://github.com/jublonet/codebird-php
 //require_once ('bower_components/codebird-php/src/codebird.php'); //Test
 require_once ('/www/htdocs/CMS/_standard3.0/_files/bower_components/codebird-php/src/codebird.php'); // production
+//$dirFiles = ""; // Test
+$dirFiles = "/www/htdocs/CMS/_standard3.0/_files/social_feeds/"; // production
 $cache = "tweet-FB-cache-html.txt";
 $FBcache = "FBPostsUSNavalAcademy.txt"; //produced by the Python script that reads the Facebook's Naval Academy page.
 $currentTime = time();
 $allPosts = "";
 $FBPosts = "";
-if (file_exists($FBcache)) {
-    if(file_get_contents($FBcache) !== false) {
-        $FBPosts = file_get_contents($FBcache);
+if (file_exists($dirFiles.$FBcache)) {
+    if(file_get_contents($dirFiles.$FBcache) !== false) {
+        $FBPosts = file_get_contents($dirFiles.$FBcache);
     }
     $allPosts = $FBPosts;
 }
 
 //if cache has not expired. Read cache file. Set to check Twitter once every 5 min.
-if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
+##if (file_exists($dirFiles.$cache) && ($currentTime - filemtime($dirFiles.$cache) > 5*60)) {
+if (file_exists($dirFiles.$cache)) {
     //Twitter OAuth Settings
     $CONSUMER_KEY = '...';
     $CONSUMER_SECRET = '...';
@@ -67,7 +70,7 @@ if (file_exists($cache) && ($currentTime - filemtime($cache) > 5*60)) {
         $allPosts .= $twitterPosts;
     }
     if ($allPosts != "") {
-        file_put_contents($cache, $allPosts);
+        file_put_contents($dirFiles.$cache, $allPosts);
     }   
 }
 
