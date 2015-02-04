@@ -58,13 +58,19 @@ if (file_exists($dirFiles.$cache)) {
               $firstImage =  $obj->entities->media;
               $imageURL = $firstImage[0]->media_url;
               $height = $firstImage[0]->sizes->small->h;
-              if ($height < 260) { //don't include images that are way too long.
+              if ($height < 341) { //Include images that are not too long as they are.
                 $img = '<a href="'.$url.'" target="_blank"><img src="'.$imageURL.':small" alt="USNA Tweet image '.$height.'" /></a>';
               }
-            }                                    
+            }
+            if (isset($obj->retweeted_status->text)) {
+                $ago = timeAgo($obj->retweeted_status->created_at);
+                $divTitle = "<div class='title'><h4><img src='http://www.usna.edu/CMS/_standard3.0/_files/img/twitter-color.png' alt='twitter logo' />@" . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>\n";
+                $text = "<p>" .makeTwitterLinks($obj->retweeted_status->text) . $img . "</p>\n";
+            }else {
             $ago = timeAgo($obj->created_at);
             $divTitle = "<div class='title'><h4><img src='http://www.usna.edu/CMS/_standard3.0/_files/img/twitter-color.png' alt='twitter logo' />@" . $obj->user->screen_name . "</h4><span class='timestamp'>" . timeAgo($obj->created_at) . "</span></div>\n";
             $text = "<p>" .makeTwitterLinks($obj->text) . $img . "</p>\n";
+            }
             $twitterPosts .= "<div class=\"feed-container\">".$divTitle.$text."</div>\n";
         }
         $allPosts .= $twitterPosts;
