@@ -144,11 +144,13 @@ appId = '...'
 appSecret = '...'
 access_token = facebook.get_app_access_token(appId, appSecret)
 ##Users List: USNA page, Economics Department, Naval Academy Preparatory School, USNAAlumni
-userList = {'USNavalAcademy':'USNavalAcademy', '205348292815145': 'USNA Econ Dept', '134448489926140': 'NAPS', 'USNAAlumni':'USNAAlumni', 'navyathletics':'navyathletics'}
+userList = {'USNavalAcademy':'USNavalAcademy', '205348292815145': 'USNA Econ Dept', '134448489926140': 'NAPS', 'USNAAlumni':'USNAAlumni', 'navyathletics':'navyathletics', 'USNABand':'USNABand'}
 userAdmissions = 'NavalAcademyAdmissions'
+##FbDirectoryWeb = '/www/htdocs/CMS/_standard3.0/_files/social_feeds'##Production
+FbDirectoryWeb = '/var/www/tests/usingTwitterAPIOauth11/'##test
 
 try:
-    graph = facebook.GraphAPI(access_token, version=2.0)
+    graph = facebook.GraphAPI(access_token, 2.0)
     for user, userNamePrint in userList.iteritems():
         profile = graph.get_object(user)
         posts = graph.get_connections(profile['id'], 'posts')
@@ -165,7 +167,7 @@ try:
                     print "Key error encountered",KeyError
             else:
                 break
-        filename = "FBPosts%s.txt" %user
+        filename = "%sFBPosts%s.txt" %(FbDirectoryWeb, user)
         f = codecs.open(filename, encoding="utf-8", mode="w")
         f.write(writePosts)
         f.close()
@@ -183,7 +185,7 @@ try:
                 print "Key error encountered",KeyError
         else:
                 break
-        filename = "FBPosts%s.txt" %userAdmissions
+        filename = "%sFBPosts%s.txt" %(FbDirectoryWeb, userAdmissions)
         f = codecs.open(filename, encoding="utf-8", mode="w")
         f.write(writePosts)
         f.close()
