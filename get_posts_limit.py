@@ -97,9 +97,9 @@ def format_post_for_slick_slider(post):
     markup = ''
     ago = timeAgo(post['created_time'])
     if post.get('name') is not None:
-        altText = post.get('name')
+        altText = "FB image"
         if post.get('message') is None:
-            message = altText
+            message = post.get('name')
         else:
             ## Print only 200 characters.
             if len(post.get('message')) > 200:
@@ -147,7 +147,7 @@ access_token = facebook.get_app_access_token(appId, appSecret)
 userList = {'USNavalAcademy':'USNavalAcademy', '205348292815145': 'USNA Econ Dept', '134448489926140': 'NAPS', 'USNAAlumni':'USNAAlumni', 'navyathletics':'navyathletics', 'USNABand':'USNABand'}
 userAdmissions = 'NavalAcademyAdmissions'
 ##FbDirectoryWeb = '/www/htdocs/CMS/_standard3.0/_files/social_feeds'##Production
-FbDirectoryWeb = '/var/www/tests/usingTwitterAPIOauth11/'##test
+FbDirectoryWeb = ''##test
 
 try:
     graph = facebook.GraphAPI(access_token, 2.0)
