@@ -68,38 +68,15 @@ def timeAgo(utcDateTimeStr):
         return pluralize(minutes, "minute")
     
 ##
-##  Format as comma delimited for Admissions
-##
-def format_posts_admissions(post):
-    markup = ''
-    message = ''
-    name = ''
-    picture = ''
-    ago = timeAgo(post['created_time'])
-    typePost = post.get('type')
-    
-    if post.get('message') is not None:
-        message = post.get('message').replace('\n', ' ').replace('\r', ' ')
-    if post.get('name') is not None:
-        name = post.get('name')
-    if post.get('picture') is not None:
-        picture = post.get('picture')
-    
-    
-    markup = "%s|%s|%s|%s|%s|%s\n"%(ago, typePost, message, name, post.get('link'), post.get('picture') )
-    return markup 
-
-
-##
 ## Format markup for Slick slider
 ##
 def format_post_for_slick_slider(post):
     markup = ''
     ago = timeAgo(post['created_time'])
     if post.get('name') is not None:
-        altText = "FB image"
+        altText = post.get('name')
         if post.get('message') is None:
-            message = post.get('name')
+            message = altText
         else:
             ## Print only 200 characters.
             if len(post.get('message')) > 200:
@@ -120,7 +97,7 @@ def format_post_for_slick_slider(post):
     if message == '' and post.get('picture') is None:
         return False
     else:
-        divTitle = "<div class=\"title\"><h4><img src=\"http://www.usna.edu/CMS/_standard3.0/_files/img/facebook-color.png\" alt=\"FB logo\" />%s</h4><span class=\"timestamp\">%s</span></div>\n" %(userNamePrint, ago)
+        divTitle = "<div class=\"title\"><h4><img src=\"http://www.usna.edu/CMS/_standard3.0/_files/img/facebook-color.png\" alt=\"FB logo\" />USNavalAcademy</h4><span class=\"timestamp\">%s</span></div>\n" %ago
         if post.get('picture') is not None:
             ## FB picture if type is photo. Get a larger image other than the thumbnail.
             if post.get('type') == "photo":
@@ -140,56 +117,30 @@ def format_post_for_slick_slider(post):
     
 # You'll need an access token here to do anything. You can get a temporary one
 # here: https://developers.facebook.com/tools/explorer/
-appId = '843114559062701'
-appSecret = '58fcca16e8e1b15d6c934462eb4990f0'
+appId = ''
+appSecret = ''
 access_token = facebook.get_app_access_token(appId, appSecret)
-##Users List: USNA page, Economics Department, Naval Academy Preparatory School, USNAAlumni
-userList = {'USNavalAcademy':'USNavalAcademy', '205348292815145': 'USNA Econ Dept', 'USNAAlumni':'USNAAlumni', 'navyathletics':'navyathletics', 'USNABand':'USNABand', '134448489926140': 'NAPS'}
-userAdmissions = 'NavalAcademyAdmissions'
-FbDirectoryWeb = '/www/htdocs/CMS/_standard3.0/_files/social_feeds/'##Production
-###FbDirectoryWeb = ''##test
-
+user = 'NavalAcademyAdmissions'
 try:
-    graph = facebook.GraphAPI(access_token, 2.0)
-    for user, userNamePrint in userList.iteritems():
-        profile = graph.get_object(user)
-        posts = graph.get_connections(profile['id'], 'posts')
-        # Format each post in the collection we receive from
-        # Facebook. I just need the latest 5 posts.
-        # Print to a file   
-        writePosts = ''
-        for index, post in enumerate(posts['data']):
-            if index < 6:
-                try:
-                    if format_post_for_slick_slider(post=post) is not False:
-                        writePosts += format_post_for_slick_slider(post=post)                
-                except KeyError:
-                    print ("Key error encountered", KeyError)
-            else:
-                break
-        filename = "%sFBPosts%s.txt" %(FbDirectoryWeb, user)
-        f = codecs.open(filename, encoding="utf-8", mode="w")
-        f.write(writePosts)
-        f.close()
-        
-    # Format each post in the collection we receive from
-    # Facebook comma separated. Print to a file for Admissions.
-    profile = graph.get_object(userAdmissions)
+    graph = facebook.GraphAPI(access_token)
+    profile = graph.get_object(user)
     posts = graph.get_connections(profile['id'], 'posts')
-    writePosts = "## Fields return from Facebook API\n##Formatted Timestamp|Post Type|Message|Name|Link|Picture\n##\n"
+    # Print requests.
+    # Format each post in the collection we receive from
+    # Facebook. I just need the latest 5 posts.
+    # Print to a file   
+    writePosts = ''
     for index, post in enumerate(posts['data']):
-        if index < 10:
-            try:            
-                writePosts += format_posts_admissions(post=post)                
+        if index < 6:
+            try:
+                if format_post_for_slick_slider(post=post) is not False:
+                    writePosts += format_post_for_slick_slider(post=post)                
             except KeyError:
-                print ("Key error encountered", KeyError)
+                print "Key error encountered",KeyError
         else:
-                break
-        filename = "%sFBPosts%s.txt" %(FbDirectoryWeb, userAdmissions)
-        f = codecs.open(filename, encoding="utf-8", mode="w")
-        f.write(writePosts)
-        f.close()
+            break
+    f = codecs.open("FBPosts.txt", encoding="utf-8", mode="w")
+    f.write(writePosts)
+    f.close()
 except facebook.GraphAPIError as e:
-    print ("Error:", e)
-except Exception as e:
-    print ("Error not in GraphAPI: ", e)
+    print "Error:", e

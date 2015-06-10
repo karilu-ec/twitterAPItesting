@@ -9,10 +9,10 @@ $currentTime = time();
 //if cache has not expired. Read cache file. Set to check Twitter once every 15 min.
 if (file_exists($cache) && ($currentTime - filemtime($cache) > 15*60)) {
     //Twitter OAuth Settings
-    $CONSUMER_KEY = '...';
-    $CONSUMER_SECRET = '...';
-    $ACCESS_TOKEN = '...';
-    $ACCESS_TOKEN_SECRET = '...';
+     $CONSUMER_KEY = '...';
+     $CONSUMER_SECRET = '...';
+     $ACCESS_TOKEN = '...';
+     $ACCESS_TOKEN_SECRET = '...';
     //Get authenticated
     \Codebird\Codebird::setConsumerKey($CONSUMER_KEY, $CONSUMER_SECRET);
     $cb = \Codebird\Codebird::getInstance();
